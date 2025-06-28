@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .input-group {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .input-group button {
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .filters {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .filters button {
+      margin: 0 5px;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      background-color: #eee;
+    }
+    .filters button.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      margin-bottom: 5px;
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+    li.completed span {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-left: 5px;
+      color: #333;
+    }
+    @media (max-width: 600px) {
+      .input-group {
+        flex-direction: column;
+      }
+      .input-group button {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📝 To-Do List</h2>
+    <div class="input-group">
+      <input type="text" id="task-input" placeholder="Add a new task..." />
+      <button onclick="addTask()">Add</button>
+      <input type="date">
+    </div>
+
+    <div class="filters">
+      <button class="active" onclick="filterTasks('all')">All</button>
+      <button onclick="filterTasks('completed')">Completed</button>
+      <button onclick="filterTasks('pending')">Pending</button>
+    </div>
+
+    <ul id="task-list"></ul>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    let filter = "all";
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      const list = document.getElementById("task-list");
+      list.innerHTML = "";
+
+      const filtered = tasks.filter(task => {
+        if (filter === "completed") return task.completed;
+        if (filter === "pending") return !task.completed;
+        return true;
+      });
+
+      filtered.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = task.completed ? "completed" : "";
+
+        const span = document.createElement("span");
+        span.textContent = task.name;
+        span.onclick = () => toggleComplete(index);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "✏️";
+        editBtn.onclick = () => editTask(index);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑️";
+        deleteBtn.onclick = () => deleteTask(index);
+
+        actions.appendChild(editBtn);
+        actions.appendChild(deleteBtn);
+
+        li.appendChild(span);
+        li.appendChild(actions);
+        list.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const input = document.getElementById("task-input");
+      const taskName = input.value.trim();
+      if (taskName) {
+        tasks.push({ name: taskName, completed: false });
+        saveTasks();
+        renderTasks();
+        input.value = "";
+      }
+    }
+
+    function toggleComplete(index) {
+      tasks[index].completed = !tasks[index].completed;
+      saveTasks();
+      renderTasks();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
+      renderTasks();
+    }
+
+    function editTask(index) {
+      const newName = prompt("Edit Task:", tasks[index].name);
+      if (newName !== null && newName.trim() !== "") {
+        tasks[index].name = newName.trim();
+        saveTasks();
+        renderTasks();
+      }
+    }
+
+    function filterTasks(type) {
+      filter = type;
+      document.querySelectorAll(".filters button").forEach(btn =>
+        btn.classList.remove("active")
+      );
+      event.target.classList.add("active");
+      renderTasks();
+    }
+
+    // Initial render
+    renderTasks();
+  </script>
+</body>
+</html>
