@@ -1,1 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SkyLaunch - Launch Your Startup Faster</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }
+    header, section, footer { padding: 60px 20px; text-align: center; }
+    h1, h2 { color: #1d3557; }
+    a.button, button {
+      background: #1d3557; color: #fff; padding: 12px 24px;
+      text-decoration: none; border: none; border-radius: 6px; cursor: pointer;
+      font-size: 16px;
+    }
 
+    /* HERO SECTION */
+    .hero {
+      background: #f1faee;
+      padding: 100px 20px;
+    }
+    .hero h1 { font-size: 3rem; margin-bottom: 20px; }
+    .hero p { font-size: 1.2rem; margin-bottom: 30px; }
+
+    /* FEATURES */
+    .features, .pricing, .testimonials {
+      background: #f8f9fa;
+    }
+    .grid {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;
+    }
+    .card {
+      background: #fff; padding: 20px; border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05); width: 300px;
+    }
+
+    /* TESTIMONIALS */
+    .testimonial p { font-style: italic; }
+    .testimonial span { display: block; margin-top: 10px; font-weight: bold; }
+
+    /* PRICING */
+    .pricing h2 { margin-bottom: 40px; }
+    .pricing .card { border: 2px solid #1d3557; }
+
+    /* CONTACT */
+    form {
+      max-width: 500px; margin: auto; text-align: left;
+    }
+    input, textarea {
+      width: 100%; padding: 12px; margin-bottom: 15px;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #1d3557; color: #fff; padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .grid { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <h1>SkyLaunch</h1>
+    <p>Accelerate your startup's growth with powerful tools and expert support.</p>
+    <a href="#contact" class="button">Get Started</a>
+  </header>
+
+  <!-- FEATURES SECTION -->
+  <section class="features">
+    <h2>Our Services</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Website Builder</h3>
+        <p>Create stunning pages without code in minutes.</p>
+      </div>
+      <div class="card">
+        <h3>Analytics</h3>
+        <p>Track your visitors and optimize your performance.</p>
+      </div>
+      <div class="card">
+        <h3>Startup Toolkit</h3>
+        <p>Legal docs, pitch decks, and tools to scale fast.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <h2>What Our Clients Say</h2>
+    <div class="grid">
+      <div class="card testimonial">
+        <p>“SkyLaunch helped us build our MVP in under a week!”</p>
+        <span>— Alex, Co-founder of FinPilot</span>
+      </div>
+      <div class="card testimonial">
+        <p>“Their toolkit saved us tons in legal and setup costs.”</p>
+        <span>— Priya, CEO of FoodieGo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING PLANS -->
+  <section class="pricing">
+    <h2>Pricing Plans</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Starter</h3>
+        <p>₹499/month</p>
+        <p>Basic tools for solo founders</p>
+      </div>
+      <div class="card">
+        <h3>Growth</h3>
+        <p>₹1499/month</p>
+        <p>All tools + Analytics & Support</p>
+      </div>
+      <div class="card">
+        <h3>Scale</h3>
+        <p>₹2999/month</p>
+        <p>Full access + dedicated expert</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <form onsubmit="submitForm(event)">
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 SkyLaunch. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function submitForm(e) {
+      e.preventDefault();
+      alert("Thank you! We'll get back to you shortly.");
+    }
+  </script>
+</body>
+</html>
