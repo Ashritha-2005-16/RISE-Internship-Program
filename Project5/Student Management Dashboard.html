@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Management Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    form input, form select {
+      padding: 10px;
+      flex: 1 1 30%;
+    }
+    form button {
+      flex: 1 1 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .search-box {
+      margin-bottom: 10px;
+      text-align: right;
+    }
+    .search-box input {
+      padding: 7px;
+      width: 200px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #f4f4f4;
+    }
+    .actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin: 0 5px;
+      font-size: 16px;
+    }
+    @media(max-width: 768px) {
+      form input, form select, form button {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🎓 Student Management Dashboard</h2>
+
+    <form id="student-form">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="text" id="regNo" placeholder="Reg No" required />
+      <input type="text" id="dept" placeholder="Department" required />
+      <input type="number" id="year" placeholder="Year" required />
+      <input type="number" id="marks" placeholder="Marks" required />
+      <button type="submit">Add / Update Student</button>
+    </form>
+
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search by Name or Reg No" oninput="renderTable()" />
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Reg No</th>
+          <th>Department</th>
+          <th>Year</th>
+          <th>Marks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="student-table">
+        <!-- Dynamic Rows -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    let editingIndex = -1;
+
+    const form = document.getElementById("student-form");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const student = {
+        name: document.getElementById("name").value.trim(),
+        regNo: document.getElementById("regNo").value.trim(),
+        dept: document.getElementById("dept").value.trim(),
+        year: parseInt(document.getElementById("year").value),
+        marks: parseFloat(document.getElementById("marks").value),
+      };
+
+      if (editingIndex === -1) {
+        students.push(student);
+      } else {
+        students[editingIndex] = student;
+        editingIndex = -1;
+      }
+
+      saveAndRender();
+      form.reset();
+    });
+
+    function saveAndRender() {
+      localStorage.setItem("students", JSON.stringify(students));
+      renderTable();
+    }
+
+    function renderTable() {
+      const table = document.getElementById("student-table");
+      const search = document.getElementById("search").value.toLowerCase();
+      table.innerHTML = "";
+
+      students
+        .filter(s =>
+          s.name.toLowerCase().includes(search) ||
+          s.regNo.toLowerCase().includes(search)
+        )
+        .forEach((s, i) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${s.name}</td>
+            <td>${s.regNo}</td>
+            <td>${s.dept}</td>
+            <td>${s.year}</td>
+            <td>${s.marks}</td>
+            <td class="actions">
+              <button onclick="editStudent(${i})">✏️</button>
+              <button onclick="deleteStudent(${i})">🗑️</button>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+    }
+
+    function editStudent(index) {
+      const s = students[index];
+      document.getElementById("name").value = s.name;
+      document.getElementById("regNo").value = s.regNo;
+      document.getElementById("dept").value = s.dept;
+      document.getElementById("year").value = s.year;
+      document.getElementById("marks").value = s.marks;
+      editingIndex = index;
+    }
+
+    function deleteStudent(index) {
+      if (confirm("Are you sure you want to delete this student?")) {
+        students.splice(index, 1);
+        saveAndRender();
+      }
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>
